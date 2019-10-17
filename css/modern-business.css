@@ -25,4 +25,9 @@ h2{
   font-size: 4rem;
   padding: (2em, 2em, 2em, 2em);
 }
+.navbar-brand .img {
+  height: 5rem;
+  width: auto;
+}
 
+/* below is the signup page */

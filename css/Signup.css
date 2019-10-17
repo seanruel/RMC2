@@ -1,3 +1,9 @@
+.navbar-brand .img {
+    height: 5rem;
+    width: auto;
+}
+
+/* below is the signup page */
 :root {
     --input-padding-x: 1.5rem;
     --input-padding-y: .75rem;
@@ -16,6 +22,7 @@
   }
   
   .card-signin .card-title {
+    margin-top: 4em;
     margin-bottom: 2rem;
     font-weight: 300;
     font-size: 1.5rem;
