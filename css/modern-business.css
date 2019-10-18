@@ -21,7 +21,7 @@ body {
   margin-bottom: 30px;
 }
 h2{
-  color: rgb(6, 86, 235);
+  color: rgb(107, 161, 255);
   font-size: 4rem;
   padding: (2em, 2em, 2em, 2em);
 }
@@ -37,4 +37,27 @@ h2{
 }
 
 
-/* below is the signup page */
+/* below is the services image */
+#panorama {
+  position: relative;
+  text-align: center;
+  color: black;
+}
+h1.text {
+  position: absolute;
+  bottom: 10.5rem;
+  left: 24rem;
+  font-size: 4rem;
+  }
+#pan {
+  width:100%;
+  height: 400px;
+  }
+
+.col-sm-3 li {
+  font-size: 1.35rem;
+  color: black;
+  }
+.col-sm-3 li :hover {
+  color: crimson;
+}
