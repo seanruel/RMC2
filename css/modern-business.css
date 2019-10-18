@@ -29,5 +29,12 @@ h2{
   height: 5rem;
   width: auto;
 }
+.img-fluid {
+  margin-top: 7em;
+}
+#title {
+  margin-top: 1.25em;
+}
+
 
 /* below is the signup page */
