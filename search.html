@@ -13,10 +13,9 @@
   <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
   <!-- Bootstrap core CSS -->
   <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
   <!-- Custom styles for this template -->
   <link href="css/search.css" rel="stylesheet">
-
+  
 </head>
 
 <body>
@@ -63,19 +62,21 @@
   <br>
   <br>
   <br>
-
+  <!-- [SEARCH FORM] -->
+  <form onsubmit="return fetch();">
   <div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4">
     <div class="input-group">
       <div class="input-group-prepend">
-        <button id="button-addon2" type="submit" class="btn btn-link text-warning"><i class="fa fa-search"></i></button>
+        <button id="button-addon2" type="submit" value="Search" class="btn btn-link text-warning"><i class="fa fa-search"></i></button>
       </div>
-      <input type="search" placeholder="What're you searching for?" aria-describedby="button-addon2" class="form-control border-0 bg-light">
+      <input type="text" id= "search" placeholder="What're you searching for?" aria-describedby="button-addon2" class="form-control border-0 bg-light">
     </div>
   </div>
-  
+  </form>
   <br>
   <br>
-  <br>
+  <!-- [SEARCH RESULTS] -->
+  <div id="results"></div>
   <br>
   <br>
   <br>
