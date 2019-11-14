@@ -1,135 +1,65 @@
 <?php
-// Include config file
-require_once "config.php";
- 
-// Define variables and initialize with empty values
-$username = $password = $confirm_password = "";
-$username_err = $password_err = $confirm_password_err = "";
- 
-// Processing form data when form is submitted
-if($_SERVER["REQUEST_METHOD"] == "POST"){
- 
-    // Validate username
-    if(empty(trim($_POST["username"]))){
-        $username_err = "Please enter a username.";
-    } else{
-        // Prepare a select statement
-        $sql = "SELECT id FROM users WHERE username = ?";
-        
-        if($stmt = mysqli_prepare($link, $sql)){
-            // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "s", $param_username);
-            
-            // Set parameters
-            $param_username = trim($_POST["username"]);
-            
-            // Attempt to execute the prepared statement
-            if(mysqli_stmt_execute($stmt)){
-                /* store result */
-                mysqli_stmt_store_result($stmt);
-                
-                if(mysqli_stmt_num_rows($stmt) == 1){
-                    $username_err = "This username is already taken.";
-                } else{
-                    $username = trim($_POST["username"]);
-                }
-            } else{
-                echo "Oops! Something went wrong. Please try again later.";
-            }
-        }
-         
-        // Close statement
-        mysqli_stmt_close($stmt);
-    }
-    
-    // Validate password
-    if(empty(trim($_POST["password"]))){
-        $password_err = "Please enter a password.";     
-    } elseif(strlen(trim($_POST["password"])) < 6){
-        $password_err = "Password must have atleast 6 characters.";
-    } else{
-        $password = trim($_POST["password"]);
-    }
-    
-    // Validate confirm password
-    if(empty(trim($_POST["confirm_password"]))){
-        $confirm_password_err = "Please confirm password.";     
-    } else{
-        $confirm_password = trim($_POST["confirm_password"]);
-        if(empty($password_err) && ($password != $confirm_password)){
-            $confirm_password_err = "Password did not match.";
-        }
-    }
-    
-    // Check input errors before inserting in database
-    if(empty($username_err) && empty($password_err) && empty($confirm_password_err)){
-        
-        // Prepare an insert statement
-        $sql = "INSERT INTO users (username, password) VALUES (?, ?)";
-         
-        if($stmt = mysqli_prepare($link, $sql)){
-            // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "ss", $param_username, $param_password);
-            
-            // Set parameters
-            $param_username = $username;
-            $param_password = password_hash($password, PASSWORD_DEFAULT); // Creates a password hash
-            
-            // Attempt to execute the prepared statement
-            if(mysqli_stmt_execute($stmt)){
-                // Redirect to login page
-                header("location: login.php");
-            } else{
-                echo "Something went wrong. Please try again later.";
-            }
-        }
-         
-        // Close statement
-        mysqli_stmt_close($stmt);
-    }
-    
-    // Close connection
-    mysqli_close($link);
+// Change this to your connection info.
+$DATABASE_HOST = 'localhost';
+$DATABASE_USER = 'root';
+$DATABASE_PASS = '';
+$DATABASE_NAME = 'phplogin';
+// Try and connect using the info above.
+$con = mysqli_connect($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME);
+if (mysqli_connect_error()) {
+	// If there is an error with the connection, stop the script and display the error.
+	die ('Failed to connect to MySQL: ' . mysqli_connect_error());
 }
+// Now we check if the data was submitted, isset() function will check if the data exists.
+if (!isset($_POST['username'], $_POST['password'], $_POST['email'])) {
+	// Could not get the data that should have been sent.
+	die ('Please complete the registration form!');
+}
+// Make sure the submitted registration values are not empty.
+if (empty($_POST['username']) || empty($_POST['password']) || empty($_POST['email'])) {
+	// One or more values are empty.
+	die ('Please complete the registration form');
+}
+// We need to check if the account with that username exists.
+if ($stmt = $con->prepare('SELECT id, password FROM accounts WHERE username = ?')) {
+	// Bind parameters (s = string, i = int, b = blob, etc), hash the password using the PHP password_hash function.
+	$stmt->bind_param('s', $_POST['username']);
+	$stmt->execute();
+	$stmt->store_result();
+	// Store the result so we can check if the account exists in the database.
+	if ($stmt->num_rows > 0) {
+		// Username already exists
+		echo 'Username exists, please choose another!';
+	} else {
+		// Username doesnt exists, insert new account
+if ($stmt = $con->prepare('INSERT INTO accounts (username, password, email) VALUES (?, ?, ?)')) {
+	// We do not want to expose passwords in our database, so hash the password and use password_verify when a user logs in.
+	$password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+	$stmt->bind_param('sss', $_POST['username'], $password, $_POST['email']);
+	$stmt->execute();
 ?>
- 
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Sign Up</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
-    <style type="text/css">
-        body{ font: 14px sans-serif; }
-        .wrapper{ width: 350px; padding: 20px; }
-    </style>
+<link href="register.css" rel="stylesheet">
 </head>
 <body>
-    <div class="wrapper">
-        <h2>Sign Up</h2>
-        <p>Please fill this form to create an account.</p>
-        <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?> 
-            <div class="form-group <?php echo (!empty($username_err)) ? 'has-error' : ''; ?>">
-                <label>Username</label>
-                <input type="text" name="username" class="form-control" value="username">
-                <span class="help-block"><?php echo $username_err; ?></span>
-            </div>    
-            <div class="form-group <?php echo (!empty($password_err)) ? 'has-error' : ''; ?>">
-                <label>Password</label>
-                <input type="password" name="password" class="form-control" value="password">
-                <span class="help-block"><?php echo $password_err; ?></span>
-            </div>
-            <div class="form-group <?php echo (!empty($confirm_password_err)) ? 'has-error' : ''; ?>">
-                <label>Confirm Password</label>
-                <input type="password" name="confirm_password" class="form-control" value="confirm_password">
-                <span class="help-block"><?php echo $confirm_password_err; ?></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" class="btn btn-primary" value="Submit">
-                <input type="reset" class="btn btn-default" value="Reset">
-            </div>
-            <p>Already have an account? <a href="login.php">Login here</a>.</p>
-        </form>
-    </div>    
+
+  <div class= "redirect" id="re">
+	<?php header('Refresh:5; url= ../signin.html'); ?>
+    <h1> <?php echo '';?> You have successfully registered, you are being redirected! </h1>
+
 </body>
-</html>
+
+<?php
+} else {
+	// Something is wrong with the sql statement, check to make sure accounts table exists with all 3 fields.
+	echo 'Could not prepare statement!';
+}
+	}
+	$stmt->close();
+} else {
+	// Something is wrong with the sql statement, check to make sure accounts table exists with all 3 fields.
+	echo 'Could not prepare statement!';
+}
+$con->close();
+?>
