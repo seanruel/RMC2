@@ -1,0 +1,30 @@
+.container{
+	padding: 20px;
+	margin-left: 20rem;
+}
+.wrapper{
+	width: 340px;
+	margin-left: 10rem;
+	margin-bottom: 2rem;
+	padding: 10px;
+    background-color: #e2e2e2;
+	box-shadow: 0 2px 4px 0 rgba(0,0,0,.25);
+    text-align: center;
+}
+.wrapper h2{
+	font-size: 20px;
+	color:#333;
+	text-align: center;
+}
+.wrapper img{
+	width: 100%;
+	margin-left: 29rem;
+}
+.ac-data{
+    text-align: left;
+}
+.fb-login-button {
+	height: 100px;
+	margin-top: 1rem;
+	padding-top: 10rem;
+}
