@@ -35,6 +35,9 @@ h2{
 #title {
   margin-top: 1.25em;
 }
+footer a {
+  text-align: center;
+}
 
 
 /* below is the services image */

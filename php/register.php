@@ -45,7 +45,7 @@ if ($stmt = $con->prepare('INSERT INTO accounts (username, password, email) VALU
 <body>
 
   <div class= "redirect" id="re">
-	<?php header('Refresh:5; url= ../signin.html'); ?>
+	<?php header('Refresh:5; url= ../signin.php'); ?>
     <h1> <?php echo '';?> You have successfully registered, you are being redirected! </h1>
 
 </body>
